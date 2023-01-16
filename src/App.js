@@ -9,19 +9,18 @@ import "./App.css";
 import "./fonts/fonts.css";
 
 function App() {
-  const file =
-    "https://outlook.live.com/owa/calendar/00000000-0000-0000-0000-000000000000/a1acd9d5-2d95-4fa4-98d5-87421f786aa3/cid-F003584BB3488402/calendar.ics";
-
   const [value, setValue] = useState("");
   const [events, setEvents] = useState("");
   const [admin, setAdmin] = useState(false);
+  const [uniform, setUniform] = useState(false);
   const [dark, setDark] = useState(() => {
     return JSON.parse(localStorage.getItem("theme") || true);
   });
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(5);
 
   const submit = (e) => {
     // setValue(e);
+    setAdmin(false);
     const jcalData = ical.parse(value);
     const comp = new ical.Component(jcalData);
     const vevent = comp.getAllSubcomponents("vevent");
@@ -45,38 +44,61 @@ function App() {
       }}
     >
       <div className="event-container">
-        {events.length > 0 &&
-          events.slice(0, limit).map((event) => {
-            return (
-              <p
-                key={event.summary}
-                id={event.summary}
-                className="event"
-                style={{
-                  background: dark ? "var(--light)" : "var(--dark)",
-                  color: dark ? "var(--dark)" : "var(--light)",
-                }}
-              >
-                <p className="title">{event.summary}</p>
-                <p className="date">
-                  {event.startDate._time.day}/{event.startDate._time.month}/
-                  {event.startDate._time.year}
+        {events.length > 0
+          ? events.slice(0, limit).map((event) => {
+              return (
+                <p
+                  key={event.summary}
+                  id={event.summary}
+                  className="event"
+                  style={{
+                    background: dark ? "var(--light)" : "var(--dark)",
+                    color: dark ? "var(--dark)" : "var(--light)",
+                    border: dark
+                      ? "5px double var(--dark)"
+                      : "5px double var(--light)",
+                    boxShadow: dark
+                      ? "1px 1px 5px var(--light)"
+                      : "1px 1px 5px var(--dark)",
+                    maxWidth: uniform ? "17.5%" : "50%",
+                  }}
+                >
+                  <p className="title">{event.summary}</p>
+                  <p className="location">{event.location}</p>
+                  <p className="date">
+                    {event.startDate._time.day}/
+                    {event.startDate._time.month < 10
+                      ? "0" + event.startDate._time.month
+                      : event.startDate._time.month}
+                    /{event.startDate._time.year}
+                    <br />
+                    {event.endDate._time.day > event.startDate._time.day &&
+                      event.endDate._time.day +
+                        "/" +
+                        (event.endDate._time.month < 10
+                          ? "0" + event.endDate._time.month
+                          : event.endDate._time.month) +
+                        "/" +
+                        event.endDate._time.year}
+                  </p>
+                  <p className="times">
+                    FROM {event.startDate._time.hour}:
+                    {event.startDate._time.minute < 10
+                      ? "0" + event.startDate._time.minute
+                      : event.startDate._time.minute}
+                    :0{event.startDate._time.second}
+                    <br />
+                    TO {event.endDate._time.hour}:
+                    {event.endDate._time.minute < 10
+                      ? "0" + event.endDate._time.minute
+                      : event.endDate._time.minute}
+                    :0
+                    {event.endDate._time.second}
+                  </p>
                 </p>
-                FROM {event.startDate._time.hour}:
-                {event.startDate._time.minute < 10
-                  ? "0" + event.startDate._time.minute
-                  : event.startDate._time.minute}
-                :0{event.startDate._time.second}
-                <br />
-                TO {event.endDate._time.hour}:
-                {event.endDate._time.minute < 10
-                  ? "0" + event.endDate._time.minute
-                  : event.endDate._time.minute}
-                :0
-                {event.endDate._time.second}
-              </p>
-            );
-          })}
+              );
+            })
+          : "No events found"}
       </div>
       <div className="admin">
         <Gear

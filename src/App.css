@@ -13,7 +13,7 @@
   text-align: center;
   font-family: "Futura LT Condensed", sans-serif;
   font-size: 2.5rem;
-  transition: 0.5s ease-in-out;
+  transition: 0.25s ease-in-out;
 }
 textarea,
 button,
@@ -27,6 +27,13 @@ input {
 button {
   padding-right: 5rem;
   padding-left: 5rem;
+  position: relative;
+  top: 0px;
+  transition: 0.25s ease-in-out;
+}
+button:hover {
+  cursor: pointer;
+  top: -5px;
 }
 .event-container {
   display: flex;
@@ -34,28 +41,34 @@ button {
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  margin: 50px 5px 10px;
 }
 .event {
-  border: 1px solid black;
   border-radius: 25px;
-  box-shadow: 1px 1px 1px white;
-  margin: 0px 10px;
-  width: 300px;
+  margin: 0px 1%;
+  min-width: 280px;
   min-height: 400px;
   position: relative;
   top: 0px;
-  transition: 0.5s ease-in-out;
+  transition: 0.25s ease-in-out;
 }
 .event:hover {
+  cursor: pointer;
   top: -10px;
 }
 .title,
-.date {
-  padding: 5px 10px;
+.location,
+.date,
+.times {
+  padding: 5px 20px;
+  font-size: 3rem;
+  font-weight: 700;
 }
 .admin {
-  margin-left: 92.5%;
+  position: absolute;
+  bottom: 7.5px;
+  right: 7.5px;
   display: flex;
   flex-direction: row;
 }
