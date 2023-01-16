@@ -12,14 +12,13 @@ function App() {
   const [value, setValue] = useState("");
   const [events, setEvents] = useState("");
   const [admin, setAdmin] = useState(false);
-  const [uniform, setUniform] = useState(false);
+  const [uniform, setUniform] = useState(true);
   const [dark, setDark] = useState(() => {
     return JSON.parse(localStorage.getItem("theme") || true);
   });
   const [limit, setLimit] = useState(5);
 
-  const submit = (e) => {
-    // setValue(e);
+  const submit = () => {
     setAdmin(false);
     const jcalData = ical.parse(value);
     const comp = new ical.Component(jcalData);
@@ -128,9 +127,39 @@ function App() {
               style={{
                 background: dark ? "var(--light)" : "var(--dark)",
                 color: dark ? "var(--dark)" : "var(--light)",
+                border: dark
+                  ? "5px double var(--dark)"
+                  : "5px double var(--light)",
+                boxShadow: dark
+                  ? "1px 1px 5px var(--light)"
+                  : "1px 1px 5px var(--dark)",
               }}
               onChange={(e) => setLimit(e.target.value)}
             />
+          </label>
+          <label>
+            Uniform Sized Cards:
+            <div className="toggle">
+              <input
+                type="checkbox"
+                id="switch"
+                value={uniform}
+                defaultChecked
+                onChange={(e) => setUniform(e.target.checked)}
+              />
+              <label
+                htmlFor="switch"
+                style={{
+                  background: dark ? "var(--light)" : "var(--dark)",
+                  border: dark
+                    ? "5px double var(--dark)"
+                    : "5px double var(--light)",
+                  boxShadow: dark
+                    ? "1px 1px 5px var(--light)"
+                    : "1px 1px 5px var(--dark)",
+                }}
+              ></label>
+            </div>
           </label>
           <label>Input ICS:</label>
           <textarea
@@ -140,16 +169,26 @@ function App() {
               height: "300px",
               background: dark ? "var(--light)" : "var(--dark)",
               color: dark ? "var(--dark)" : "var(--light)",
+              border: dark
+                ? "5px double var(--dark)"
+                : "5px double var(--light)",
+              boxShadow: dark
+                ? "1px 1px 5px var(--light)"
+                : "1px 1px 5px var(--dark)",
             }}
-            // onChange={(e) => submit(e.target.value)}
             onChange={(e) => setValue(e.target.value)}
           ></textarea>
-          {/* <button type="submit" onClick={(e) => submit(e.target.value)}> */}
           <button
             type="submit"
             style={{
               background: dark ? "var(--light)" : "var(--dark)",
               color: dark ? "var(--dark)" : "var(--light)",
+              border: dark
+                ? "5px double var(--dark)"
+                : "5px double var(--light)",
+              boxShadow: dark
+                ? "1px 1px 5px var(--light)"
+                : "1px 1px 5px var(--dark)",
             }}
             onClick={submit}
           >
