@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
-import "./App.css";
 import { useState } from "react";
 import ical from "ical.js";
+import "./App.css";
 
 function App() {
   const file =
@@ -9,6 +9,7 @@ function App() {
 
   const [value, setValue] = useState("");
   const [events, setEvents] = useState("");
+  const [limit, setLimit] = useState(2);
   const submit = () => {
     const jcalData = ical.parse(value);
     const comp = new ical.Component(jcalData);
@@ -27,20 +28,11 @@ function App() {
   };
   return (
     <div className="App">
-      <header className="App-header">
-        <textarea
-          style={{ width: "80%", height: "500px" }}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        ></textarea>
-        <button type="submit" onClick={submit}>
-          {" "}
-          Submit
-        </button>
+      <div className="event-container">
         {events.length > 0 &&
-          events.map((event) => {
+          events.slice(0, limit).map((event) => {
             return (
-              <p key={event.summary} id={event.summary}>
+              <p key={event.summary} id={event.summary} className="event">
                 {event.summary}: FROM {event.startDate._time.hour}:
                 {event.startDate._time.minute}:{event.startDate._time.second} on{" "}
                 {event.startDate._time.day}/{event.startDate._time.month}/
@@ -51,7 +43,22 @@ function App() {
               </p>
             );
           })}
-      </header>
+      </div>
+      <label>Limit:</label>
+      <input
+        type="number"
+        value={limit}
+        onChange={(e) => setLimit(e.target.value)}
+      />
+      <textarea
+        style={{ width: "80%", height: "500px" }}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      ></textarea>
+      <button type="submit" onClick={submit}>
+        {" "}
+        Submit
+      </button>
     </div>
   );
 }
