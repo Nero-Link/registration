@@ -11,12 +11,36 @@ import "./fonts/fonts.css";
 function App() {
   const [value, setValue] = useState("");
   const [events, setEvents] = useState("");
+  const [dates, setDates] = useState("");
   const [admin, setAdmin] = useState(false);
   const [uniform, setUniform] = useState(true);
   const [dark, setDark] = useState(() => {
     return JSON.parse(localStorage.getItem("theme") || true);
   });
   const [limit, setLimit] = useState(5);
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   const submit = () => {
     setAdmin(false);
@@ -24,16 +48,24 @@ function App() {
     const comp = new ical.Component(jcalData);
     const vevent = comp.getAllSubcomponents("vevent");
     let tempEvents = [];
+    let tempDates = [];
+
     vevent.forEach((event) => {
       tempEvents.push(new ical.Event(event));
+      const fulldate = new Date(event.jCal[1][3][3]);
+      const date = fulldate.getDate();
+      const day = days[fulldate.getDay()];
+      const month = months[fulldate.getMonth()];
+      tempDates.push(`${day} ${date} ${month}`);
     });
     setEvents(tempEvents);
+    setDates(tempDates);
   };
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify(dark));
   }, [dark]);
-
+  console.log(dates);
   return (
     <div
       className="App"
