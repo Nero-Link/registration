@@ -17,7 +17,7 @@ function App() {
   const [dark, setDark] = useState(() => {
     return JSON.parse(localStorage.getItem("theme") || true);
   });
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(3);
   const days = [
     "Sunday",
     "Monday",
@@ -42,6 +42,14 @@ function App() {
     "December",
   ];
 
+  const dateConstructor = (dates) => {
+    const fulldate = new Date(dates.jCal[1][3][3]);
+    const date = fulldate.getDate();
+    const day = days[fulldate.getDay()];
+    const month = months[fulldate.getMonth()];
+    return `${day} ${date} ${month}`;
+  };
+
   const submit = () => {
     setAdmin(false);
     const jcalData = ical.parse(value);
@@ -52,20 +60,15 @@ function App() {
 
     vevent.forEach((event) => {
       tempEvents.push(new ical.Event(event));
-      const fulldate = new Date(event.jCal[1][3][3]);
-      const date = fulldate.getDate();
-      const day = days[fulldate.getDay()];
-      const month = months[fulldate.getMonth()];
-      tempDates.push(`${day} ${date} ${month}`);
+      tempDates.push(dateConstructor(event));
     });
     setEvents(tempEvents);
-    setDates(tempDates);
+    setDates([...new Set(tempDates)]);
   };
 
   useEffect(() => {
     localStorage.setItem("theme", JSON.stringify(dark));
   }, [dark]);
-  console.log(dates);
   return (
     <div
       className="App"
@@ -74,59 +77,53 @@ function App() {
         color: dark ? "var(--light)" : "var(--dark)",
       }}
     >
-      <div className="event-container">
-        {events.length > 0
-          ? events.slice(0, limit).map((event) => {
+      <div className="dates-container">
+        {dates.length > 0
+          ? dates.slice(0, limit).map((date) => {
               return (
-                <p
-                  key={event.summary}
-                  id={event.summary}
-                  className="event"
+                <div
+                  className="date-column"
                   style={{
-                    background: dark ? "var(--light)" : "var(--dark)",
-                    color: dark ? "var(--dark)" : "var(--light)",
-                    border: dark
-                      ? "5px double var(--dark)"
-                      : "5px double var(--light)",
-                    boxShadow: dark
-                      ? "1px 1px 5px var(--light)"
-                      : "1px 1px 5px var(--dark)",
-                    maxWidth: uniform ? "17.5%" : "50%",
+                    maxWidth: uniform ? (100 / limit).toString() + "%" : "50%",
                   }}
                 >
-                  <p className="title">{event.summary}</p>
-                  <p className="location">{event.location}</p>
-                  <p className="date">
-                    {event.startDate._time.day}/
-                    {event.startDate._time.month < 10
-                      ? "0" + event.startDate._time.month
-                      : event.startDate._time.month}
-                    /{event.startDate._time.year}
-                    <br />
-                    {event.endDate._time.day > event.startDate._time.day &&
-                      event.endDate._time.day +
-                        "/" +
-                        (event.endDate._time.month < 10
-                          ? "0" + event.endDate._time.month
-                          : event.endDate._time.month) +
-                        "/" +
-                        event.endDate._time.year}
-                  </p>
-                  <p className="times">
-                    FROM {event.startDate._time.hour}:
-                    {event.startDate._time.minute < 10
-                      ? "0" + event.startDate._time.minute
-                      : event.startDate._time.minute}
-                    :0{event.startDate._time.second}
-                    <br />
-                    TO {event.endDate._time.hour}:
-                    {event.endDate._time.minute < 10
-                      ? "0" + event.endDate._time.minute
-                      : event.endDate._time.minute}
-                    :0
-                    {event.endDate._time.second}
-                  </p>
-                </p>
+                  <h3 className="date-title">{date}</h3>
+                  <div className="event-container">
+                    {events.length > 0 &&
+                      events.map((event) => {
+                        return dateConstructor(event.component) === date ? (
+                          <div
+                            key={event.summary}
+                            id={event.summary}
+                            className="event"
+                            style={{
+                              background: dark ? "var(--light)" : "var(--dark)",
+                              color: dark ? "var(--dark)" : "var(--light)",
+                              border: dark
+                                ? "5px double var(--dark)"
+                                : "5px double var(--light)",
+                              boxShadow: dark
+                                ? "1px 1px 5px var(--light)"
+                                : "1px 1px 5px var(--dark)",
+                            }}
+                          >
+                            <div className="event-topline">
+                              <h4 className="event-title">{event.summary}</h4>
+                              <h4 className="event-time">
+                                {event.startDate._time.hour > 12
+                                  ? event.startDate._time.hour - 12
+                                  : event.startDate._time.hour}
+                                {event.startDate._time.minute > 0 &&
+                                  ":" + event.startDate._time.minute}
+                                {event.startDate._time.hour < 12 ? "AM" : "PM"}
+                              </h4>
+                            </div>
+                            <p className="event-location">{event.location}</p>
+                          </div>
+                        ) : null;
+                      })}
+                  </div>
+                </div>
               );
             })
           : "No events found"}

@@ -4,6 +4,8 @@
   --grey: grey;
   --darkgrey: darkgrey;
   --lightgrey: lightgrey;
+  --darkblue: #002c5a;
+  --lightblue: #00b5dd;
 }
 .App {
   min-height: 100vh;
@@ -85,20 +87,32 @@ label {
 .toggle label:active:after {
   width: 130px;
 }
+.dates-container {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 50px 5px 10px;
+}
+.date-column {
+  margin: 20px;
+}
 .event-container {
   display: flex;
   align-content: center;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
   margin: 50px 5px 10px;
 }
 .event {
-  border-radius: 25px;
   margin: 0px 1%;
-  min-width: 280px;
-  min-height: 400px;
+  width: 100%;
+  min-width: 300px;
+  min-height: 100px;
   position: relative;
   top: 0px;
   transition: 0.25s ease-in-out;
@@ -107,13 +121,16 @@ label {
   cursor: pointer;
   top: -10px;
 }
-.title,
-.location,
-.date,
-.times {
-  padding: 5px 20px;
-  font-size: 3rem;
-  font-weight: 700;
+.event-topline {
+  display: flex;
+  flex-direction: row;
+}
+.event-title,
+.event-time,
+.event-location {
+  padding: 5px;
+  margin: 5px;
+  text-align: left;
 }
 .admin {
   position: absolute;
