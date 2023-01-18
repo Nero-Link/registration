@@ -1,9 +1,7 @@
-import logo from "./logo.svg";
 import { useEffect, useState } from "react";
 import ical from "ical.js";
 
 import { ReactComponent as Gear } from "./images/gear.svg";
-import { ReactComponent as Moon } from "./images/moon.svg";
 
 import "./App.css";
 import "./fonts/fonts.css";
@@ -13,11 +11,7 @@ function App() {
   const [events, setEvents] = useState("");
   const [dates, setDates] = useState("");
   const [admin, setAdmin] = useState(false);
-  const [uniform, setUniform] = useState(true);
-  const [dark, setDark] = useState(() => {
-    return JSON.parse(localStorage.getItem("theme") || true);
-  });
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(9);
   const days = [
     "Sunday",
     "Monday",
@@ -65,26 +59,148 @@ function App() {
     setEvents(tempEvents);
     setDates([...new Set(tempDates)]);
   };
-
-  useEffect(() => {
-    localStorage.setItem("theme", JSON.stringify(dark));
-  }, [dark]);
   return (
-    <div
-      className="App"
-      style={{
-        background: dark ? "var(--dark)" : "var(--light)",
-        color: dark ? "var(--light)" : "var(--dark)",
-      }}
-    >
-      <div className="dates-container">
+    <div className="App">
+      <div
+        className="dates-container"
+        style={{
+          gridTemplateColumns: dates.length === 0 && "100%",
+          gridTemplateRows:
+            dates.length > 6 && limit > 6
+              ? "minmax(16.25%, 20%) minmax(16.25%, 20%) minmax(16.25%, 20%) minmax(16.25%, 20%)"
+              : dates.length > 3 && (dates.length < 7 || limit > 3)
+              ? "26.25% 26.25% 26.25% 26.25%"
+              : "auto",
+        }}
+      >
         {dates.length > 0
-          ? dates.slice(0, limit).map((date) => {
+          ? dates.slice(0, limit).map((date, index) => {
               return (
                 <div
+                  key={index}
                   className="date-column"
                   style={{
-                    maxWidth: uniform ? (100 / limit).toString() + "%" : "50%",
+                    gridRow:
+                      index < 3
+                        ? "1"
+                        : index > 2 && index < 6
+                        ? "2"
+                        : index > 5 && index < 9
+                        ? "3"
+                        : "4",
+                    gridColumn:
+                      index === 0 || index === 3 || index === 6 || index === 9
+                        ? "1"
+                        : index === 1 ||
+                          index === 4 ||
+                          index === 7 ||
+                          index === 10
+                        ? "2"
+                        : index === 2 ||
+                          index === 5 ||
+                          index === 8 ||
+                          index === 12
+                        ? "3"
+                        : null,
+                    gridRowEnd:
+                      events.filter((event) => {
+                        return dateConstructor(event.component) === date;
+                      }).length > 1
+                        ? index < 3
+                          ? "2"
+                          : index > 2 && index < 6
+                          ? "3"
+                          : "auto"
+                        : "auto",
+                    marginTop:
+                      index > 2 && index < 6
+                        ? events.filter((event) => {
+                            return (
+                              dateConstructor(event.component) ===
+                              dates[index - 3]
+                            );
+                          }).length > 1 &&
+                          21.5 *
+                            (events.filter((event) => {
+                              return (
+                                dateConstructor(event.component) ===
+                                dates[index - 3]
+                              );
+                            }).length -
+                              1) +
+                            "%"
+                        : index > 5 && index < 9
+                        ? (events.filter((event) => {
+                            return (
+                              dateConstructor(event.component) ===
+                              dates[index - 3]
+                            );
+                          }).length > 1 ||
+                            events.filter((event) => {
+                              return (
+                                dateConstructor(event.component) ===
+                                dates[index - 6]
+                              );
+                            }).length > 1) &&
+                          21.5 *
+                            (events.filter((event) => {
+                              return (
+                                dateConstructor(event.component) ===
+                                dates[index - 3]
+                              );
+                            }).length -
+                              1 +
+                              events.filter((event) => {
+                                return (
+                                  dateConstructor(event.component) ===
+                                  dates[index - 6]
+                                );
+                              }).length -
+                              1) +
+                            "%"
+                        : index > 8 && index < 12
+                        ? (events.filter((event) => {
+                            return (
+                              dateConstructor(event.component) ===
+                              dates[index - 3]
+                            );
+                          }).length > 1 ||
+                            events.filter((event) => {
+                              return (
+                                dateConstructor(event.component) ===
+                                dates[index - 6]
+                              );
+                            }).length > 1 ||
+                            events.filter((event) => {
+                              return (
+                                dateConstructor(event.component) ===
+                                dates[index - 9]
+                              );
+                            }).length > 1) &&
+                          21.5 *
+                            (events.filter((event) => {
+                              return (
+                                dateConstructor(event.component) ===
+                                dates[index - 3]
+                              );
+                            }).length -
+                              1 +
+                              events.filter((event) => {
+                                return (
+                                  dateConstructor(event.component) ===
+                                  dates[index - 6]
+                                );
+                              }).length -
+                              1 +
+                              events.filter((event) => {
+                                return (
+                                  dateConstructor(event.component) ===
+                                  dates[index - 9]
+                                );
+                              }).length -
+                              1) +
+                            "%"
+                        : "0%",
                   }}
                 >
                   <h3 className="date-title">{date}</h3>
@@ -96,19 +212,13 @@ function App() {
                             key={event.summary}
                             id={event.summary}
                             className="event"
-                            style={{
-                              background: dark ? "var(--light)" : "var(--dark)",
-                              color: dark ? "var(--dark)" : "var(--light)",
-                              border: dark
-                                ? "5px double var(--dark)"
-                                : "5px double var(--light)",
-                              boxShadow: dark
-                                ? "1px 1px 5px var(--light)"
-                                : "1px 1px 5px var(--dark)",
-                            }}
                           >
                             <div className="event-topline">
-                              <h4 className="event-title">{event.summary}</h4>
+                              <h4 className="event-title">
+                                {event.summary.length > 33
+                                  ? event.summary.substring(0, 33) + "..."
+                                  : event.summary}
+                              </h4>{" "}
                               <h4 className="event-time">
                                 {event.startDate._time.hour > 12
                                   ? event.startDate._time.hour - 12
@@ -133,62 +243,22 @@ function App() {
           width="50px"
           height="50px"
           style={{
-            fill: dark ? "var(--light)" : "var(--dark)",
+            fill: "var(--dark)",
           }}
           onClick={(e) => setAdmin(!admin)}
-        />
-        <Moon
-          width="50px"
-          height="50px"
-          style={{
-            fill: dark ? "var(--light)" : "var(--dark)",
-          }}
-          onClick={(e) => setDark(!dark)}
         />
       </div>
       {admin && (
         <div className="admin-controls">
           <label>
-            Limit:
+            Max # of Days:
             <input
               type="number"
+              max="9"
+              min="1"
               value={limit}
-              style={{
-                background: dark ? "var(--light)" : "var(--dark)",
-                color: dark ? "var(--dark)" : "var(--light)",
-                border: dark
-                  ? "5px double var(--dark)"
-                  : "5px double var(--light)",
-                boxShadow: dark
-                  ? "1px 1px 5px var(--light)"
-                  : "1px 1px 5px var(--dark)",
-              }}
               onChange={(e) => setLimit(e.target.value)}
             />
-          </label>
-          <label>
-            Uniform Sized Cards:
-            <div className="toggle">
-              <input
-                type="checkbox"
-                id="switch"
-                value={uniform}
-                defaultChecked
-                onChange={(e) => setUniform(e.target.checked)}
-              />
-              <label
-                htmlFor="switch"
-                style={{
-                  background: dark ? "var(--light)" : "var(--dark)",
-                  border: dark
-                    ? "5px double var(--dark)"
-                    : "5px double var(--light)",
-                  boxShadow: dark
-                    ? "1px 1px 5px var(--light)"
-                    : "1px 1px 5px var(--dark)",
-                }}
-              ></label>
-            </div>
           </label>
           <label>Input ICS:</label>
           <textarea
@@ -196,31 +266,10 @@ function App() {
             style={{
               width: "80%",
               height: "300px",
-              background: dark ? "var(--light)" : "var(--dark)",
-              color: dark ? "var(--dark)" : "var(--light)",
-              border: dark
-                ? "5px double var(--dark)"
-                : "5px double var(--light)",
-              boxShadow: dark
-                ? "1px 1px 5px var(--light)"
-                : "1px 1px 5px var(--dark)",
             }}
             onChange={(e) => setValue(e.target.value)}
           ></textarea>
-          <button
-            type="submit"
-            style={{
-              background: dark ? "var(--light)" : "var(--dark)",
-              color: dark ? "var(--dark)" : "var(--light)",
-              border: dark
-                ? "5px double var(--dark)"
-                : "5px double var(--light)",
-              boxShadow: dark
-                ? "1px 1px 5px var(--light)"
-                : "1px 1px 5px var(--dark)",
-            }}
-            onClick={submit}
-          >
+          <button type="submit" onClick={submit}>
             {" "}
             Submit
           </button>

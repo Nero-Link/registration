@@ -1,11 +1,11 @@
 :root {
-  --dark: #282c34;
-  --light: #ffffff;
+  --dark: #002c5a;
+  --light: #00b5dd;
+  --black: #000000;
+  --white: #ffffff;
   --grey: grey;
   --darkgrey: darkgrey;
   --lightgrey: lightgrey;
-  --darkblue: #002c5a;
-  --lightblue: #00b5dd;
 }
 .App {
   min-height: 100vh;
@@ -18,6 +18,8 @@
   font-family: "Futura LT Condensed", sans-serif;
   font-size: 2.5rem;
   transition: 0.25s ease-in-out;
+  background: var(--white);
+  color: var(--dark);
 }
 textarea,
 button,
@@ -27,6 +29,14 @@ input {
   border-radius: 15px;
   padding: 1.5rem;
   margin: 10px;
+  background: var(--dark);
+  color: var(--light);
+  border: 5px double var(--white);
+  box-shadow: 1px 1px 5px var(--dark);
+}
+input {
+  width: 100px;
+  text-align: center;
 }
 textarea {
   resize: none;
@@ -48,56 +58,22 @@ label {
   flex-direction: row;
   margin: 10px auto;
 }
-.toggle {
-  margin: -10% 15px 10px;
-}
-.toggle input[type="checkbox"] {
-  height: 0;
-  width: 0;
-  visibility: hidden;
-}
-.toggle label {
-  cursor: pointer;
-  text-indent: -9999px;
-  width: 200px;
-  height: 100px;
-  display: block;
-  border-radius: 100px;
-  position: relative;
-}
-.toggle label:after {
-  content: "";
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 90px;
-  height: 90px;
-  background: var(--grey);
-  border-radius: 90px;
-  transition: 0.3s;
-}
-.toggle input:checked + label {
-  background: var(--darkgrey) !important;
-}
-.toggle input:checked + label:after {
-  left: calc(100% - 5px);
-  transform: translateX(-100%);
-  background: var(--lightgrey);
-}
-.toggle label:active:after {
-  width: 130px;
-}
 .dates-container {
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  margin: 50px 5px 10px;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: auto;
+  align-items: start;
+  justify-items: stretch;
+  justify-content: space-evenly;
+  grid-gap: 15px;
+  width: 95%;
 }
 .date-column {
-  margin: 20px;
+  max-width: 100%;
+}
+.date-title {
+  margin: 5px;
+  font-size: 2rem;
 }
 .event-container {
   display: flex;
@@ -106,16 +82,19 @@ label {
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-  margin: 50px 5px 10px;
 }
 .event {
-  margin: 0px 1%;
+  margin: 5px;
   width: 100%;
   min-width: 300px;
-  min-height: 100px;
+  min-height: 105px;
   position: relative;
   top: 0px;
   transition: 0.25s ease-in-out;
+  background: var(--dark);
+  color: var(--white);
+  border: 1px solid var(--white);
+  box-shadow: 1px 1px 5px var(--dark);
 }
 .event:hover {
   cursor: pointer;
@@ -128,9 +107,14 @@ label {
 .event-title,
 .event-time,
 .event-location {
-  padding: 5px;
-  margin: 5px;
+  margin: 0px 10px;
   text-align: left;
+}
+.event-title {
+  max-height: 150px;
+}
+.event-location {
+  color: var(--light);
 }
 .admin {
   position: absolute;
