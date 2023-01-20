@@ -6,7 +6,7 @@ import { ReactComponent as Gear } from "./images/gear.svg";
 import "./App.css";
 import "./fonts/fonts.css";
 
-function App() {
+function Calendar() {
   const [value, setValue] = useState("");
   const [events, setEvents] = useState("");
   const [dates, setDates] = useState("");
@@ -279,4 +279,4 @@ function App() {
   );
 }
 
-export default App;
+export default Calendar;
