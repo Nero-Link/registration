@@ -24,7 +24,7 @@ export const updateSettings = async (objectsToAdd) => {
   const batch = writeBatch(db);
 
   objectsToAdd.forEach((object) => {
-    const docRef = doc(collectionRef, object.id);
+    const docRef = doc(collectionRef, "admin");
     batch.set(docRef, object);
   });
   await batch.commit();
