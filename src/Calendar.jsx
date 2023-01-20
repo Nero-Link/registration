@@ -48,31 +48,33 @@ function Calendar() {
   };
 
   const load = () => {
-    const jcalData = ical.parse(value);
-    const comp = new ical.Component(jcalData);
-    const vevent = comp.getAllSubcomponents("vevent");
-    let tempEvents = [];
-    let tempDates = [];
+    if (value && limit && timeout) {
+      const jcalData = ical.parse(value);
+      const comp = new ical.Component(jcalData);
+      const vevent = comp.getAllSubcomponents("vevent");
+      let tempEvents = [];
+      let tempDates = [];
 
-    vevent.forEach((event) => {
-      tempEvents.push(new ical.Event(event));
-      tempDates.push(dateConstructor(event));
-    });
-    setEvents(tempEvents);
-    setDates([...new Set(tempDates)]);
-    setMessage(
-      `Loaded @ ${
-        new Date().getHours() < 10
-          ? "0" + new Date().getHours()
-          : new Date().getHours()
-      }:${
-        new Date().getMinutes() < 10
-          ? "0" + new Date().getMinutes()
-          : new Date().getMinutes()
-      } on  ${new Date().getDate()}/${new Date().getMonth() + 1}/${
-        new Date().getYear() + 1900
-      }`
-    );
+      vevent.forEach((event) => {
+        tempEvents.push(new ical.Event(event));
+        tempDates.push(dateConstructor(event));
+      });
+      setEvents(tempEvents);
+      setDates([...new Set(tempDates)]);
+      setMessage(
+        `Loaded @ ${
+          new Date().getHours() < 10
+            ? "0" + new Date().getHours()
+            : new Date().getHours()
+        }:${
+          new Date().getMinutes() < 10
+            ? "0" + new Date().getMinutes()
+            : new Date().getMinutes()
+        } on  ${new Date().getDate()}/${new Date().getMonth() + 1}/${
+          new Date().getYear() + 1900
+        }`
+      );
+    }
   };
 
   useEffect(
@@ -84,7 +86,7 @@ function Calendar() {
         setLimit(response[0].admin.limit);
         setTimeout(response[0].admin.timeout);
       }
-      if (value && limit) load();
+      if (value && limit && timeout) load();
     },
     [refresh]
   );
