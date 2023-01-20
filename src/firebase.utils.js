@@ -35,5 +35,6 @@ export const getSettings = async () => {
   const collectionRef = collection(db, "config");
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
+  console.log("Got data from DB");
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
