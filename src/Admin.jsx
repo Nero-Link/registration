@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ical from "ical.js";
+import { getSettings, updateSettings } from "./firebase.utils";
 
 import { ReactComponent as Gear } from "./images/gear.svg";
 
@@ -12,6 +13,7 @@ function Admin() {
   const [dates, setDates] = useState("");
   const [admin, setAdmin] = useState(false);
   const [limit, setLimit] = useState(9);
+
   const days = [
     "Sunday",
     "Monday",
@@ -35,6 +37,16 @@ function Admin() {
     "November",
     "December",
   ];
+  const SETTINGS_DATA = [
+    {
+      id: "ics",
+      ics: { value },
+    },
+    {
+      id: "limit",
+      limit: { limit },
+    },
+  ];
 
   const dateConstructor = (dates) => {
     const fulldate = new Date(dates.jCal[1][3][3]);
@@ -44,8 +56,10 @@ function Admin() {
     return `${day} ${date} ${month}`;
   };
 
-  const submit = () => {
+  const calendarParse = () => {
     setAdmin(false);
+    updateSettings(SETTINGS_DATA);
+
     const jcalData = ical.parse(value);
     const comp = new ical.Component(jcalData);
     const vevent = comp.getAllSubcomponents("vevent");
@@ -59,6 +73,18 @@ function Admin() {
     setEvents(tempEvents);
     setDates([...new Set(tempDates)]);
   };
+
+  useEffect(
+    () => async () => {
+      const response = await getSettings();
+      if (response) {
+        setValue(response[0].ics.value);
+        setLimit(response[1].limit.limit);
+      }
+    },
+    []
+  );
+
   return (
     <div className="App">
       <div
@@ -269,7 +295,7 @@ function Admin() {
             }}
             onChange={(e) => setValue(e.target.value)}
           ></textarea>
-          <button type="submit" onClick={submit}>
+          <button type="submit" onClick={calendarParse}>
             {" "}
             Submit
           </button>

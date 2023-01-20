@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ical from "ical.js";
 
 import { ReactComponent as Gear } from "./images/gear.svg";
