@@ -81,7 +81,6 @@ function Calendar() {
     () => async () => {
       const response = await getSettings();
       if (response) {
-        console.log(response);
         setValue(response[0].admin.ics);
         setLimit(response[0].admin.limit);
         setTimeout(response[0].admin.timeout);

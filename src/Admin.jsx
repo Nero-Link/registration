@@ -5,9 +5,9 @@ import "./App.css";
 import "./fonts/fonts.css";
 
 function Admin() {
-  const [value, setValue] = useState("");
-  const [limit, setLimit] = useState(9);
-  const [timeout, setTimeout] = useState(1);
+  const [value, setValue] = useState();
+  const [limit, setLimit] = useState();
+  const [timeout, setTimeout] = useState();
   const [message, setMessage] = useState("");
 
   const SETTINGS_DATA = [
@@ -48,7 +48,7 @@ function Admin() {
         setTimeout(response[0].admin.timeout);
       }
     },
-    []
+    [value, limit, timeout]
   );
 
   return (
