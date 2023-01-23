@@ -80,7 +80,7 @@ label {
 }
 .date-title {
   margin: 5px;
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-align: left;
   color: var(--light);
 }
@@ -97,7 +97,7 @@ label {
   margin: 5px 5px 10px 5px;
   width: 100%;
   min-width: 300px;
-  min-height: 105px;
+  min-height: 70px;
   position: relative;
   top: 0px;
   transition: 0.25s ease-in-out;
@@ -123,6 +123,7 @@ label {
 }
 .event-location {
   color: var(--light);
+  font-size: 1.75rem;
 }
 .admin {
   position: absolute;

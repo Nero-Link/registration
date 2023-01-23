@@ -47,7 +47,7 @@ function Calendar() {
         const dateNumber = fulldate.getDate();
         const day = days[fulldate.getDay()];
         const month = months[fulldate.getMonth()];
-        finalDate = `${day} ${dateNumber} ${month}`;
+        if (fulldate > new Date()) finalDate = `${day} ${dateNumber} ${month}`;
       }
     });
     return finalDate;
@@ -62,7 +62,6 @@ function Calendar() {
       let tempDates = [];
 
       vevent.forEach((event) => {
-        console.log(event);
         tempEvents.push(new ical.Event(event));
         tempDates.push(dateConstructor(event));
       });
@@ -106,8 +105,7 @@ function Calendar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer((timer) => timer + 1);
-    }, tick);
-    // }, tick * 12 * timeout);
+    }, tick * 12 * timeout);
     return () => clearInterval(interval);
   }, []);
 
@@ -129,47 +127,48 @@ function Calendar() {
                 <div className="event-container">
                   {events.length > 0 &&
                     events.map((event, index) => {
-                      if (
-                        index === 0 ||
-                        event.summary !== events[index - 1].summary
-                      )
-                        return dateConstructor(event.component) === date ? (
-                          <div
-                            key={
-                              event.summary +
-                              ": " +
-                              event.startDate._time.hour +
-                              ":" +
-                              event.startDate._time.minute
-                            }
-                            id={event.summary}
-                            className="event"
-                          >
-                            <div className="event-topline">
-                              <h4 className="event-title">
-                                {event.summary.length > 33
-                                  ? event.summary.substring(0, 33) + "..."
-                                  : event.summary}
-                              </h4>{" "}
-                              <h4 className="event-time">
-                                {event.startDate._time.hour > 12
-                                  ? event.startDate._time.hour - 12
-                                  : event.startDate._time.hour === 0
-                                  ? ""
-                                  : event.startDate._time.hour}
-                                {event.startDate._time.minute > 0 &&
-                                  ":" + event.startDate._time.minute}
-                                {event.startDate._time.hour < 13 &&
-                                event.startDate._time.hour > 0
-                                  ? "AM"
-                                  : event.startDate._time.hour > 12
-                                  ? "PM"
-                                  : "All Day"}
-                              </h4>
-                            </div>
-                            <p className="event-location">{event.location}</p>
+                      // if (
+                      //   index === 0 ||
+                      //   event.summary !== events[index - 1].summary
+                      // )
+                      return dateConstructor(event.component) === date &&
+                        date !== "" ? (
+                        <div
+                          key={
+                            event.summary +
+                            ": " +
+                            event.startDate._time.hour +
+                            ":" +
+                            event.startDate._time.minute
+                          }
+                          id={event.summary}
+                          className="event"
+                        >
+                          <div className="event-topline">
+                            <h4 className="event-title">
+                              {event.summary.length > 33
+                                ? event.summary.substring(0, 33) + "..."
+                                : event.summary}
+                            </h4>{" "}
+                            <h4 className="event-time">
+                              {event.startDate._time.hour > 12
+                                ? event.startDate._time.hour - 12
+                                : event.startDate._time.hour === 0
+                                ? ""
+                                : event.startDate._time.hour}
+                              {event.startDate._time.minute > 0 &&
+                                ":" + event.startDate._time.minute}
+                              {event.startDate._time.hour < 13 &&
+                              event.startDate._time.hour > 0
+                                ? "AM"
+                                : event.startDate._time.hour > 12
+                                ? "PM"
+                                : "All Day"}
+                            </h4>
                           </div>
-                        ) : null;
+                          <p className="event-location">{event.location}</p>
+                        </div>
+                      ) : null;
                     })}
                 </div>
               </div>
