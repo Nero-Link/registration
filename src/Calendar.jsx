@@ -62,6 +62,7 @@ function Calendar() {
       let tempDates = [];
 
       vevent.forEach((event) => {
+        console.log(event);
         tempEvents.push(new ical.Event(event));
         tempDates.push(dateConstructor(event));
       });
@@ -122,45 +123,53 @@ function Calendar() {
       <div className="dates-container">
         {dates.length > 0 ? (
           dates.slice(0, limit).map((date, index) => {
-            let counter = 0;
             return (
               <div key={index} className="date-column">
                 <h3 className="date-title">{date}</h3>
                 <div className="event-container">
                   {events.length > 0 &&
-                    events.map((event) => {
-                      counter++;
-                      return dateConstructor(event.component) === date &&
-                        counter < 7 ? (
-                        <div
-                          key={
-                            event.summary +
-                            ": " +
-                            event.startDate._time.hour +
-                            ":" +
-                            event.startDate._time.minute
-                          }
-                          id={event.summary}
-                          className="event"
-                        >
-                          <div className="event-topline">
-                            <h4 className="event-title">
-                              {event.summary.length > 33
-                                ? event.summary.substring(0, 33) + "..."
-                                : event.summary}
-                            </h4>{" "}
-                            <h4 className="event-time">
-                              {event.startDate._time.hour > 12
-                                ? event.startDate._time.hour - 12
-                                : event.startDate._time.hour}
-                              {event.startDate._time.minute > 0 &&
-                                ":" + event.startDate._time.minute}
-                              {event.startDate._time.hour < 12 ? "AM" : "PM"}
-                            </h4>
+                    events.map((event, index) => {
+                      if (
+                        index === 0 ||
+                        event.summary !== events[index - 1].summary
+                      )
+                        return dateConstructor(event.component) === date ? (
+                          <div
+                            key={
+                              event.summary +
+                              ": " +
+                              event.startDate._time.hour +
+                              ":" +
+                              event.startDate._time.minute
+                            }
+                            id={event.summary}
+                            className="event"
+                          >
+                            <div className="event-topline">
+                              <h4 className="event-title">
+                                {event.summary.length > 33
+                                  ? event.summary.substring(0, 33) + "..."
+                                  : event.summary}
+                              </h4>{" "}
+                              <h4 className="event-time">
+                                {event.startDate._time.hour > 12
+                                  ? event.startDate._time.hour - 12
+                                  : event.startDate._time.hour === 0
+                                  ? ""
+                                  : event.startDate._time.hour}
+                                {event.startDate._time.minute > 0 &&
+                                  ":" + event.startDate._time.minute}
+                                {event.startDate._time.hour < 13 &&
+                                event.startDate._time.hour > 0
+                                  ? "AM"
+                                  : event.startDate._time.hour > 12
+                                  ? "PM"
+                                  : "All Day"}
+                              </h4>
+                            </div>
+                            <p className="event-location">{event.location}</p>
                           </div>
-                          <p className="event-location">{event.location}</p>
-                        </div>
-                      ) : null;
+                        ) : null;
                     })}
                 </div>
               </div>

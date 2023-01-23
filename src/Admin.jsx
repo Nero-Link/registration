@@ -64,7 +64,7 @@ function Admin() {
             Max # of Days:
             <input
               type="number"
-              max="9"
+              max="12"
               min="1"
               value={limit}
               onChange={(e) => setLimit(e.target.value)}
