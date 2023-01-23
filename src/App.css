@@ -21,6 +21,13 @@
   background: var(--white);
   color: var(--dark);
 }
+h2 {
+  margin: 10px;
+  text-align: left;
+  width: 95%;
+  font-size: 3.5rem;
+  color: var(--light);
+}
 textarea,
 button,
 input {
@@ -59,17 +66,15 @@ label {
   margin: 10px auto;
 }
 .dates-container {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-template-rows: auto;
-  align-items: start;
-  justify-items: stretch;
-  justify-content: space-evenly;
-  grid-gap: 15px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   width: 95%;
+  height: 100vh;
 }
 .date-column {
   max-width: 100%;
+  margin-bottom: 10px;
 }
 .date-title {
   margin: 5px;
@@ -86,7 +91,7 @@ label {
   flex-wrap: nowrap;
 }
 .event {
-  margin: 5px;
+  margin: 5px 5px 10px 5px;
   width: 100%;
   min-width: 300px;
   min-height: 105px;
@@ -108,6 +113,7 @@ label {
 .event-location {
   margin: 0px 5px;
   text-align: left;
+  font-weight: 500;
 }
 .event-title {
   max-height: 150px;
