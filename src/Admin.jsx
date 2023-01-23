@@ -47,6 +47,7 @@ function Admin() {
         setLimit(response[0].admin.limit);
         setTimeout(response[0].admin.timeout);
       }
+      console.log("Got data from DB");
     },
     []
   );
