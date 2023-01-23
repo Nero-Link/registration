@@ -52,6 +52,8 @@ function Admin() {
     []
   );
 
+  getSettings();
+
   return (
     <div className="App">
       <div className="admin-controls">
