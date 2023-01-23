@@ -77,18 +77,23 @@ function Calendar() {
     }
   };
 
-  useEffect(
-    () => async () => {
+  const getAdminSettings = async () => {
+    try {
       const response = await getSettings();
       if (response) {
         setValue(response[0].admin.ics);
         setLimit(response[0].admin.limit);
         setTimeout(response[0].admin.timeout);
       }
-      if (value && limit && timeout) load();
-    },
-    [refresh]
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAdminSettings();
+    if (value && limit && timeout) load();
+  }, [refresh]);
 
   useEffect(() => {
     const interval = setInterval(() => {
