@@ -14,7 +14,7 @@ function Calendar() {
   const [refresh, setRefresh] = useState(0);
   const [timer, setTimer] = useState(0);
   const [message, setMessage] = useState("");
-  const tick = 5000;
+  let tick = 5000;
   const days = [
     "Sunday",
     "Monday",
@@ -105,7 +105,7 @@ function Calendar() {
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer((timer) => timer + 1);
-    }, tick * 12 * timeout);
+    }, tick);
     return () => clearInterval(interval);
   }, []);
 
