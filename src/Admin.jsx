@@ -39,20 +39,23 @@ function Admin() {
       );
   };
 
-  useEffect(
-    () => async () => {
+  const getAdminSettings = async () => {
+    try {
       const response = await getSettings();
       if (response) {
         setValue(response[0].admin.ics);
         setLimit(response[0].admin.limit);
         setTimeout(response[0].admin.timeout);
       }
-      console.log("Got data from DB");
-    },
-    []
-  );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  getSettings();
+  useEffect(() => {
+    getAdminSettings();
+    console.log("Got data from DB");
+  }, []);
 
   return (
     <div className="App">
