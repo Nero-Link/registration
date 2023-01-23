@@ -106,6 +106,7 @@ function Calendar() {
     const interval = setInterval(() => {
       setTimer((timer) => timer + 1);
     }, tick);
+    console.log(tick);
     return () => clearInterval(interval);
   }, []);
 
@@ -118,7 +119,10 @@ function Calendar() {
   return (
     <div className="App">
       <h2>Upcoming Events</h2>
-      <div className="dates-container">
+      <div
+        className="dates-container"
+        style={{ justifyContent: dates.length === 0 && "center" }}
+      >
         {dates.length > 0 ? (
           dates.slice(0, limit).map((date, index) => {
             return (
