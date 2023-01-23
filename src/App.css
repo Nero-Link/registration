@@ -51,6 +51,7 @@ textarea {
 button {
   padding-right: 5rem;
   padding-left: 5rem;
+  margin: 10px auto;
   position: relative;
   top: 0px;
   transition: 0.25s ease-in-out;

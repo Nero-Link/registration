@@ -40,11 +40,17 @@ function Calendar() {
   ];
 
   const dateConstructor = (dates) => {
-    const fulldate = new Date(dates.jCal[1][3][3]);
-    const date = fulldate.getDate();
-    const day = days[fulldate.getDay()];
-    const month = months[fulldate.getMonth()];
-    return `${day} ${date} ${month}`;
+    let finalDate = "";
+    dates.jCal[1].map((date) => {
+      if (date[0] === "dtstart") {
+        const fulldate = new Date(date[3]);
+        const dateNumber = fulldate.getDate();
+        const day = days[fulldate.getDay()];
+        const month = months[fulldate.getMonth()];
+        finalDate = `${day} ${dateNumber} ${month}`;
+      }
+    });
+    return finalDate;
   };
 
   const load = () => {
@@ -81,9 +87,11 @@ function Calendar() {
     try {
       const response = await getSettings();
       if (response) {
-        setValue(response[0].admin.ics);
-        setLimit(response[0].admin.limit);
-        setTimeout(response[0].admin.timeout);
+        if (value !== response[0].admin.ics) setValue(response[0].admin.ics);
+        if (limit !== response[0].admin.limit)
+          setLimit(response[0].admin.limit);
+        if (timeout !== response[0].admin.timeout)
+          setTimeout(response[0].admin.timeout);
       }
     } catch (error) {
       console.log(error);
@@ -92,13 +100,13 @@ function Calendar() {
 
   useEffect(() => {
     getAdminSettings();
-    if (value && limit && timeout) load();
   }, [refresh]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer((timer) => timer + 1);
     }, tick);
+    // }, tick * 12 * timeout);
     return () => clearInterval(interval);
   }, []);
 
@@ -114,15 +122,24 @@ function Calendar() {
       <div className="dates-container">
         {dates.length > 0 ? (
           dates.slice(0, limit).map((date, index) => {
+            let counter = 0;
             return (
               <div key={index} className="date-column">
                 <h3 className="date-title">{date}</h3>
                 <div className="event-container">
                   {events.length > 0 &&
                     events.map((event) => {
-                      return dateConstructor(event.component) === date ? (
+                      counter++;
+                      return dateConstructor(event.component) === date &&
+                        counter < 7 ? (
                         <div
-                          key={event.summary}
+                          key={
+                            event.summary +
+                            ": " +
+                            event.startDate._time.hour +
+                            ":" +
+                            event.startDate._time.minute
+                          }
                           id={event.summary}
                           className="event"
                         >
@@ -152,11 +169,7 @@ function Calendar() {
         ) : (
           <>
             No events found{" "}
-            <button
-              type="submit"
-              style={{ width: "400px", margin: "0px auto" }}
-              onClick={load}
-            >
+            <button type="submit" style={{ width: "400px" }} onClick={load}>
               {" "}
               Load Calendar
             </button>
