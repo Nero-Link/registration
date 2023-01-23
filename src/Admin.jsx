@@ -54,7 +54,6 @@ function Admin() {
 
   useEffect(() => {
     getAdminSettings();
-    console.log("Got data from DB");
   }, []);
 
   return (
