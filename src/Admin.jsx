@@ -48,7 +48,7 @@ function Admin() {
         setTimeout(response[0].admin.timeout);
       }
     },
-    [value, limit, timeout]
+    []
   );
 
   return (
