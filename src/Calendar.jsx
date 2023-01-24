@@ -88,11 +88,9 @@ function Calendar() {
     try {
       const response = await getSettings();
       if (response) {
-        if (value !== response[0].admin.ics) setValue(response[0].admin.ics);
-        if (limit !== response[0].admin.limit)
-          setLimit(response[0].admin.limit);
-        if (timeout !== response[0].admin.timeout)
-          setTimeout(response[0].admin.timeout);
+        if (value !== response[0].ics) setValue(response[0].ics);
+        if (limit !== response[0].limit) setLimit(response[0].limit);
+        if (timeout !== response[0].timeout) setTimeout(response[0].timeout);
         setLoaded(true);
       }
     } catch (error) {

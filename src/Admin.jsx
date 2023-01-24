@@ -12,11 +12,9 @@ function Admin() {
 
   const SETTINGS_DATA = [
     {
-      admin: {
-        ics: value,
-        limit: limit,
-        timeout: timeout,
-      },
+      ics: value,
+      limit: limit,
+      timeout: timeout,
     },
   ];
 
@@ -43,9 +41,9 @@ function Admin() {
     try {
       const response = await getSettings();
       if (response) {
-        setValue(response[0].admin.ics);
-        setLimit(response[0].admin.limit);
-        setTimeout(response[0].admin.timeout);
+        setValue(response[0].ics);
+        setLimit(response[0].limit);
+        setTimeout(response[0].timeout);
       }
     } catch (error) {
       console.log(error);
