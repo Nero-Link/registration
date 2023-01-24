@@ -14,7 +14,8 @@ function Calendar() {
   const [refresh, setRefresh] = useState(0);
   const [timer, setTimer] = useState(0);
   const [message, setMessage] = useState("");
-  let tick = 5000;
+  const [loaded, setLoaded] = useState(false);
+  let tick = 60000;
   const days = [
     "Sunday",
     "Monday",
@@ -92,6 +93,7 @@ function Calendar() {
           setLimit(response[0].admin.limit);
         if (timeout !== response[0].admin.timeout)
           setTimeout(response[0].admin.timeout);
+        setLoaded(true);
       }
     } catch (error) {
       console.log(error);
@@ -101,6 +103,10 @@ function Calendar() {
   useEffect(() => {
     getAdminSettings();
   }, [refresh]);
+
+  useEffect(() => {
+    if (loaded) load();
+  }, [loaded]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -178,13 +184,9 @@ function Calendar() {
             );
           })
         ) : (
-          <>
-            No events found{" "}
-            <button type="submit" style={{ width: "400px" }} onClick={load}>
-              {" "}
-              Load Calendar
-            </button>
-          </>
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
         )}
       </div>
       <span id="message" dangerouslySetInnerHTML={{ __html: message }}></span>
