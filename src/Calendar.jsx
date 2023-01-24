@@ -106,7 +106,6 @@ function Calendar() {
     const interval = setInterval(() => {
       setTimer((timer) => timer + 1);
     }, tick);
-    console.log(tick);
     return () => clearInterval(interval);
   }, []);
 
