@@ -1,14 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 
-import Calendar from "./Calendar";
-import Admin from "./Admin";
+import Login from "./Login";
+import Register from "./Register";
+import LoggedIn from "./LoggedIn";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route index element={<Calendar />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route index element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/loggedin" element={<LoggedIn />} />
       </Routes>
     </>
   );

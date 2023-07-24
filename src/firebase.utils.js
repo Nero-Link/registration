@@ -9,32 +9,33 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCVltj_3-Wkwx64ytqV5_SPPDzaob3yn6g",
-  authDomain: "kingswood-calendar-92872.firebaseapp.com",
-  projectId: "kingswood-calendar-92872",
-  storageBucket: "kingswood-calendar-92872.appspot.com",
-  messagingSenderId: "743595071955",
-  appId: "1:743595071955:web:bbd673371e8e92ae017726",
+  apiKey: "AIzaSyB80I8aTILbkAViM1LdiW1fWpxUYDThdb4",
+  authDomain: "register-f0b64.firebaseapp.com",
+  projectId: "register-f0b64",
+  storageBucket: "register-f0b64.appspot.com",
+  messagingSenderId: "430309695852",
+  appId: "1:430309695852:web:9e4e0223b5e639fbd49349",
 };
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore();
 
-export const updateSettings = async (objectsToAdd) => {
-  const collectionRef = collection(db, "config");
+export const updateLogins = async (objectsToAdd) => {
+  const collectionRef = collection(db, "logins");
   const batch = writeBatch(db);
 
   objectsToAdd.forEach((object) => {
-    const docRef = doc(collectionRef, "admin");
+    console.log(object);
+    const docRef = doc(collectionRef, object.email);
     batch.set(docRef, object);
   });
   await batch.commit();
-  console.log("Done updating settings in DB");
+  console.log("Registered to DB");
 };
 
-export const getSettings = async () => {
-  const collectionRef = collection(db, "config");
+export const getLogins = async () => {
+  const collectionRef = collection(db, "logins");
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
-  console.log("Got data from DB");
+  console.log("Got logins from DB");
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
