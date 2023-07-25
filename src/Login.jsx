@@ -28,9 +28,11 @@ function Login() {
     try {
       const response = await getLogins();
       if (response) {
-        if (email === response[0].email && password === response[0].password)
-          navigate("/loggedin");
-        else setMessage("Login failed!");
+        response.forEach((login) => {
+          if (email === login.email && password === login.password)
+            navigate("/loggedin");
+          else setMessage("Login failed!");
+        });
       }
     } catch (error) {
       console.log(error);
